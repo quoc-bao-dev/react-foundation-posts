@@ -1,5 +1,7 @@
 import { FormEventHandler, useRef } from "react"
-import { createPost } from "../services/postService"
+import { useDispatch } from "react-redux"
+import { setPosts } from "../features/postSlice"
+import { createPost, getAllPost } from "../services/postService"
 
 const CreatePost = () => {
 
@@ -7,6 +9,8 @@ const CreatePost = () => {
     const contentRef = useRef<HTMLInputElement>(null)
     const nameRef = useRef<HTMLInputElement>(null)
     const avatarRef = useRef<HTMLInputElement>(null)
+
+    const dispatch = useDispatch()
     const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
         e.preventDefault()
 
@@ -25,6 +29,13 @@ const CreatePost = () => {
                 avatar
             }
             createPost(post)
+            titleRef.current.value = ""
+            contentRef.current.value = ""
+            nameRef.current.value = ""
+            avatarRef.current.value = ""
+            alert("Post created successfully")
+
+            getAllPost().then(res => dispatch(setPosts(res.data)))
         }
 
     }
